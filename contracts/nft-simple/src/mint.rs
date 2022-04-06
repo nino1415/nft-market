@@ -8,7 +8,7 @@ impl Contract {
         token_id: Option<TokenId>,
         metadata: TokenMetadata,
         perpetual_royalties: Option<HashMap<AccountId, u32>>,
-        receiver_id: Option<ValidAccountId>,
+        receiver_id: Option<AccountId>,
         token_type: Option<TokenType>,
     ) {
 
@@ -49,7 +49,7 @@ impl Contract {
                 .unwrap_or_else(|| {
                     UnorderedSet::new(
                         StorageKey::TokensPerTypeInner {
-                            token_type_hash: hash_account_id(&token_type),
+                            token_type_hash: hash_account_id(&AccountId::new_unchecked(token_type)),
                         }
                         .try_to_vec()
                         .unwrap(),

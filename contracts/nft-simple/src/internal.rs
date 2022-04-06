@@ -42,12 +42,12 @@ pub(crate) fn refund_deposit(storage_used: u64) {
         Promise::new(env::predecessor_account_id()).transfer(refund);
     }
 }
-
+/*
 // TODO: need a way for end users to determine how much an approval will cost.
 pub(crate) fn bytes_for_approved_account_id(account_id: &AccountId) -> u64 {
     // The extra 4 bytes are coming from Borsh serialization to store the length of the string.
     account_id.len() as u64 + 4 + size_of::<u64>() as u64
-}
+}*/
 
 pub(crate) fn refund_approved_account_ids_iter<'a, I>(
     account_id: AccountId,
@@ -132,7 +132,7 @@ impl Contract {
 
 		if sender_id != &token.owner_id {
 			if !token.approved_account_ids.contains_key(sender_id) {
-				env::panic(b"Unauthorized");
+				env::panic_str("Unauthorized");
 			}
 			// If they included an enforce_approval_id, check the receiver approval id
 			if let Some(enforced_approval_id) = approval_id {
@@ -174,7 +174,7 @@ impl Contract {
         self.tokens_by_id.insert(token_id, &new_token);
 
         if let Some(memo) = memo {
-            env::log(format!("Memo: {}", memo).as_bytes());
+            env::log_str(format!("Memo: {}", memo).as_str());
         }
 
         token
